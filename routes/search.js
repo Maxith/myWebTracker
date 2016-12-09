@@ -9,7 +9,7 @@ var btInfoDao = require('../dao/btInfo');
 
 router.get('/', function(req, res, next) {
 	var v = req.query.v;
-	btInfoDao.queryByHax(v,function (err,data) {
+	btInfoDao.queryByName(v,function (err,data) {
 		if(err != null){
 			console.log(err);
 		}else {

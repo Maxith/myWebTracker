@@ -7,10 +7,10 @@
  */
 module.exports = {
     mysql:{
-        host : '192.168.2.48',
-        user : 'root',
-        password : 'my-new-password',
-        database : 'btTracker',
-        port : 3306
+        host: '127.0.0.1',
+        user: 'root',
+        password: '123123',
+        database:'btTracker',
+        port: 3306
     }
 };

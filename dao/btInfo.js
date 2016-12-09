@@ -3,7 +3,7 @@
  */
 //CRUD SQL语句
 var btInfoSQLMapping = {
-    queryByHax : 'SELECT * FROM BT_INFO WHERE NAME LIKE ? OR ID = ? '
+    queryByName : 'SELECT * FROM BT_INFO WHERE NAME LIKE ?'
 };
 
 var  mysql = require('mysql');
@@ -15,10 +15,10 @@ var pool  = mysql.createPool($util.extend({}, $conf.mysql));
 
 
 module.exports = {
-    queryByHax : function (val,callback) {
+    queryByName : function (val,callback) {
         pool.getConnection(function(err, connection) {
             // 建立连接，查询
-            connection.query(btInfoSQLMapping.queryByHax, [val,val], function(err, result) {
+            connection.query(btInfoSQLMapping.queryByName, ['%' + val + '%'], function(err, result) {
                 if(err != null)
                     callback(err,null);
                 else
