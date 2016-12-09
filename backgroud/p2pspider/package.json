@@ -14,7 +14,8 @@
   "dependencies": {
     "bencode": "^0.7.0",
     "bitfield": "^1.1.2",
-    "mysql" : "*"
+    "mysql" : "*",
+    "node-uuid" : "*"
   },
   "keywords": [
     "torrent",

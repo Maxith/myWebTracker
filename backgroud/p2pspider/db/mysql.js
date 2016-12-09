@@ -4,9 +4,10 @@
 'use strict';
 //CRUD SQL语句
 var sqlMapping = {
-    insertInfo : 'insert into bt_info(id,name,json_string) values (?,?,?)'
+    insertInfo : 'insert into BT_INFO(id,name,json_string) values (?,?,?)'
 };
 
+var uuid = require('node-uuid');
 var mysql = require('mysql');
 var $conf = require('../conf/db');
 var $util = require('../util/util');
@@ -32,11 +33,9 @@ p2p.on('metadata', function (metadata) {
 
     pool.getConnection(function(err, connection) {
         // 建立连接，插入
-        connection.query(sqlMapping.insertInfo, [metadata.infohash,data.name,JSON.stringify(data)], function(err, result) {
+        connection.query(sqlMapping.insertInfo, [uuid.v4(),data.name,JSON.stringify(data)], function(err, result) {
             if(err != null)
-                callback(err,null);
-            else
-                callback(null,result);
+                console.log(err);
             // 释放连接
             connection.release();
         });
