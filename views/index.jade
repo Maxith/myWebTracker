@@ -1,0 +1,20 @@
+doctype html
+html(lang='zh-CN')
+  head
+    title=title
+    link(rel='stylesheet', href='http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    .well.jumbotron
+      h1 #{title}
+      input#searchValue(type='text')
+      p
+        a.btn.btn-primary.btn-lg(href='javascript:void(0);', onclick='searchMyBt()', role='button') 搜索
+    script(src='http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js')
+    script(src='http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js')
+    script(type='text/javascript').
+      function searchMyBt(){
+        var v = document.getElementById('searchValue');
+        window.location = '/search.html?v=' + v.value;
+      }
+  block content
