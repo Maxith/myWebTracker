@@ -3,8 +3,8 @@
  */
 'use strict';
 //CRUD SQL语句
-var btInfoSQLMapping = {
-    queryByHax : 'SELECT * FROM BT_INFO WHERE NAME LIKE ? OR ID = ? '
+var sqlMapping = {
+    insertInfo : 'insert into bt_info(id,name,json_string) values (?,?,?)'
 };
 
 var mysql = require('mysql');
@@ -23,26 +23,28 @@ var p2p = P2PSpider({
     timeout: 5000
 });
 
-p2p.ignore(function (infohash, rinfo, callback) {
-    db.get(infohash, function (err, value) {
-        callback(!!err);
-    });
-});
 
 p2p.on('metadata', function (metadata) {
     var data = {};
     data.magnet = metadata.magnet;
     data.name = metadata.info.name ? metadata.info.name.toString() : '';
     data.fetchedAt = new Date().getTime();
-    // db.put(metadata.infohash, JSON.stringify(data), function (err) {
-    //     if(!err) {
-    //         console.log(data.name);
-    //     }
-    // });
+
+    pool.getConnection(function(err, connection) {
+        // 建立连接，插入
+        connection.query(sqlMapping.insertInfo, [metadata.infohash,data.name,JSON.stringify(data)], function(err, result) {
+            if(err != null)
+                callback(err,null);
+            else
+                callback(null,result);
+            // 释放连接
+            connection.release();
+        });
+    });
 });
 
 process.on('SIGINT', function() {
-    db.close(function(err) {
+    pool.end(function(err) {
         console.log("DB closed!");
         process.exit();
     });
