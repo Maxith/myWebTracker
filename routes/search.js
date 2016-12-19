@@ -8,8 +8,8 @@ var router = express.Router();
 var btInfoDao = require('../dao/btInfo');
 
 router.get('/page.html', function(req, res, next) {
-    var param = req.params;
-	res.render('search', {vName : param.v});
+    var param = req.query.v;
+	res.render('search', {vName : param});
 });
 
 router.post('/pageValue.json',function (req, res, next) {
@@ -18,6 +18,8 @@ router.post('/pageValue.json',function (req, res, next) {
         single=param.singlePageCount;
 
     var start = (page-1) * single,end = page*single,total = 0;
+
+    res.header("Content-Type", "application/json;charset=utf-8");
     btInfoDao.queryByNameTotal(param.vName,function (err,data){
         if(err != null){
             console.log(err);

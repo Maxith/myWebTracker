@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var tool_base = require('./util/urlChinese');
 
 var index = require('./routes/index');
 var search = require('./routes/search');
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(tool_base);
 app.use('/', index);
 app.use('/search', search);
 
