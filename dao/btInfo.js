@@ -3,7 +3,8 @@
  */
 //CRUD SQL语句
 var btInfoSQLMapping = {
-    queryByName : 'SELECT * FROM BT_INFO WHERE NAME LIKE ?'
+    queryByNameTotal : 'SELECT count(*) as s FROM BT_INFO WHERE NAME LIKE ?',
+    queryByNameWithPage : 'SELECT * FROM BT_INFO WHERE NAME LIKE ? order by name desc LIMIT ?,?'
 };
 
 var  mysql = require('mysql');
@@ -15,10 +16,23 @@ var pool  = mysql.createPool($util.extend({}, $conf.mysql));
 
 
 module.exports = {
-    queryByName : function (val,callback) {
+    queryByNameTotal : function (val,callback) {
         pool.getConnection(function(err, connection) {
             // 建立连接，查询
-            connection.query(btInfoSQLMapping.queryByName, ['%' + val + '%'], function(err, result) {
+            connection.query(btInfoSQLMapping.queryByNameTotal, ['%' + val + '%'], function(err, result) {
+                if(err != null)
+                    callback(err,null);
+                else
+                    callback(null,result);
+                // 释放连接
+                connection.release();
+            });
+        });
+    },
+    queryByNameWithPage : function (val,start,end,callback) {
+        pool.getConnection(function(err, connection) {
+            // 建立连接，查询
+            connection.query(btInfoSQLMapping.queryByNameWithPage, ['%' + val + '%',start,end], function(err, result) {
                 if(err != null)
                     callback(err,null);
                 else

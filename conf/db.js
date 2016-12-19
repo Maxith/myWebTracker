@@ -7,7 +7,7 @@
  */
 module.exports = {
     mysql:{
-        host: '127.0.0.1',
+        host: '192.168.2.54',
         user: 'root',
         password: '123123',
         database:'btTracker',

@@ -4,7 +4,8 @@
 'use strict';
 //CRUD SQL语句
 var sqlMapping = {
-    insertInfo : 'insert into BT_INFO(id,name,json_string) values (?,?,?)'
+    queryByHax : 'select * from BT_INFO where hax = ?',
+    insertInfo : 'insert into BT_INFO(id,hax,name,json_string) values (?,?,?,?)'
 };
 
 var uuid = require('node-uuid');
@@ -20,7 +21,7 @@ var P2PSpider = require('../lib');
 
 var p2p = P2PSpider({
     nodesMaxSize: 200,
-    maxConnections: 400,
+    maxConnections: 100,
     timeout: 5000
 });
 
@@ -32,13 +33,23 @@ p2p.on('metadata', function (metadata) {
     data.fetchedAt = new Date().getTime();
 
     pool.getConnection(function(err, connection) {
-        // 建立连接，插入
-        connection.query(sqlMapping.insertInfo, [uuid.v4(),data.name,JSON.stringify(data)], function(err, result) {
-            if(err != null)
+        var flag = true;
+        // 建立连接，查询
+        connection.query(sqlMapping.queryByHax,[metadata.infohash],function (err, result) {
+            if(err != null){
                 console.log(err);
-            // 释放连接
-            connection.release();
+            }else if(result != null){
+                flag = false;
+            }
         });
+        if(flag){
+            connection.query(sqlMapping.insertInfo, [uuid.v4(),metadata.infohash,data.name,JSON.stringify(data)], function(err, result) {
+                if(err != null)
+                    console.log(err);
+            });
+        }
+        // 释放连接
+        connection.release();
     });
 });
 

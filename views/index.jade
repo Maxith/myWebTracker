@@ -6,7 +6,7 @@ html(lang='zh-CN')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     .well.jumbotron
-      h1 #{title}
+      h1 查询结果
       input#searchValue(type='text')
       p
         a.btn.btn-primary.btn-lg(href='javascript:void(0);', onclick='searchMyBt()', role='button') 搜索
@@ -15,6 +15,6 @@ html(lang='zh-CN')
     script(type='text/javascript').
       function searchMyBt(){
         var v = document.getElementById('searchValue');
-        window.location = '/search.html?v=' + v.value;
+        window.location = '/search/page.html?v=' + v.value;
       }
   block content
